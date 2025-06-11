@@ -1,4 +1,4 @@
-name: Deploy HTML Website to GitHub Pages
+name: "CI/CD: Validate and Deploy HTML to GitHub Pages"
 
 on:
   push:
@@ -11,12 +11,22 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  validate-and-deploy:
     runs-on: ubuntu-latest
-    environment: github-pages  # Add this line
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install htmlhint
+        run: npm install -g htmlhint
+
+      - name: Run htmlhint
+        run: htmlhint **/*.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

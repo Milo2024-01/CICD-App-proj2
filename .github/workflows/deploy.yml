@@ -1,18 +1,23 @@
-name: Deploy HTML to GitHub Pages
+name: HTML Lint
 
 on:
   push:
     branches: [main]
 
 jobs:
-  deploy:
+  htmlhint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .  # root folder
+          node-version: 18
+
+      - name: Install htmlhint
+        run: npm install -g htmlhint
+
+      - name: Run htmlhint on HTML files
+        run: htmlhint "**/*.html"
